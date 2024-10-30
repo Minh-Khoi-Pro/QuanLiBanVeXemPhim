@@ -1,4 +1,4 @@
-create database [Java_QuanLiBanVeXemPhim]
+﻿create database [Java_QuanLiBanVeXemPhim]
 
 use [Java_QuanLiBanVeXemPhim]
 
@@ -77,7 +77,94 @@ CREATE TABLE LICHCHIEUPHIM (
 	FOREIGN KEY(MaPhong) REFERENCES PHONGCHIEUPHIM(MaPhong)
 );
 
-insert into PHIM values('P1', N'aaa', N'bbb', N'ccc', 2025, 7, 'fdbfdbcv')
+/*insert into PHIM values('P1', N'aaa', N'bbb', N'ccc', 2025, 7, 'fdbfdbcv')
 insert into PHIM values('P2', N'aaa', N'bbb', N'ccc', 2023, 6, 'fdsg')
 insert into PHIM values('P3', N'dnsdbvs', N'sfbgdgs', N'sgsagas', 2026, 8, 'fbdfbdf')
-select * from PHIM
+select * from PHIM */
+
+CREATE PROCEDURE AddPhim 
+    @MaPhim NVARCHAR(10),
+    @TenPhim NVARCHAR(100),
+    @QuocGia NVARCHAR(50),
+    @DaoDien NVARCHAR(50),
+    @NamSanXuat INT,
+    @ThoiLuong INT,
+    @TheLoai NVARCHAR(50)
+AS
+BEGIN
+    INSERT INTO Phim(MaPhim, TenPhim, QuocGia, DaoDien, NamSanXuat, ThoiLuong, TheLoai)
+    VALUES (@MaPhim, @TenPhim, @QuocGia, @DaoDien, @NamSanXuat, @ThoiLuong, @TheLoai);
+END;
+
+EXEC AddPhim 
+    @MaPhim = 'P111',
+    @TenPhim = N'One Piece',
+    @QuocGia = N'Nhat Ban',
+    @DaoDien = N'Oda',
+    @NamSanXuat = 1997,
+    @ThoiLuong = 1000,
+    @TheLoai = N'Phieu Luu';
+
+EXEC AddPhim 
+    @MaPhim = 'P112',
+    @TenPhim = N'Tham Tu Lung Danh Conan',
+    @QuocGia = N'Nhat Ban',
+    @DaoDien = N'GhoSho Aoyama',
+    @NamSanXuat = 1997,
+    @ThoiLuong = 1500,
+    @TheLoai = N'Trinh Tham';
+
+TRUNCATE TABLE PHIM; -- Xóa toàn bộ dữ liệu trong bảng PHIM
+
+--Xóa 1 phim theo mã
+CREATE PROCEDURE DeletePhim
+@MaPhim NVARCHAR(10)
+AS
+BEGIN
+   DELETE FROM Phim WHERE MaPhim = @MaPhim
+END
+
+EXEC DeletePhim
+	@MaPhim = 'P111'
+
+--Cập nhật phim
+CREATE PROCEDURE UpdatePhim 
+    @MaPhim NVARCHAR(30),
+    @TenPhim NVARCHAR(100),
+    @QuocGia NVARCHAR(50),
+    @DaoDien NVARCHAR(50),
+    @NamSanXuat INT,
+    @ThoiLuong INT,
+    @TheLoai NVARCHAR(50)
+AS
+BEGIN
+    UPDATE PHIM
+    SET TenPhim = @TenPhim,
+        QuocGia = @QuocGia,
+        DaoDien = @DaoDien,
+        NamSanXuat = @NamSanXuat,
+        ThoiLuong = @ThoiLuong,
+        TheLoai = @TheLoai
+    WHERE MaPhim = @MaPhim;
+END;
+
+EXEC UpdatePhim 
+    @MaPhim = 'P111',
+    @TenPhim = N'Phim Mới',
+    @QuocGia = N'Việt Nam',
+    @DaoDien = N'Nguyễn Văn A',
+    @NamSanXuat = 2024,
+    @ThoiLuong = 120,
+    @TheLoai = N'Hài Hước';
+
+
+
+CREATE PROCEDURE GetAllPhim
+AS
+	BEGIN
+		SELECT * FROM PHIM;
+	END
+
+--EXEC sp_rename 'sp_GetAllPhim', 'GetAllPhim';
+
+
